@@ -18,7 +18,6 @@ import { useFocusEffect } from "@react-navigation/native";
 export default function InquireScreen({ route, navigation }) {
   const { bookingId, totalPrice, motorcycle } = route.params;
   const filters = route?.params?.filters || {};
-  console.log("Inquire: ", filters);
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState("");
