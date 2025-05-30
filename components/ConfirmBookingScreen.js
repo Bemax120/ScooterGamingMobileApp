@@ -24,6 +24,8 @@ export default function ConfirmBooking({ route, navigation }) {
     route.params;
   const auth = getAuth();
 
+  const filters = route?.params?.filters || {};
+
   const [loading, setLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -95,7 +97,13 @@ export default function ConfirmBooking({ route, navigation }) {
 
       setLoading(false);
       Alert.alert("Success", "Booking confirmed!");
-      navigation.navigate("Inquire", { bookingId, totalPrice, motorcycle });
+      console.log("Confirm:", filters);
+      navigation.navigate("Inquire", {
+        filters,
+        bookingId,
+        totalPrice,
+        motorcycle,
+      });
     } catch (error) {
       console.error("ConfirmBooking Error:", error);
       setLoading(false);
@@ -171,7 +179,12 @@ export default function ConfirmBooking({ route, navigation }) {
 
       setLoading(false);
       Alert.alert("Success", "Booking confirmed!");
-      navigation.navigate("Inquire", { bookingId, totalPrice, motorcycle });
+      navigation.navigate("Inquire", {
+        filters,
+        bookingId,
+        totalPrice,
+        motorcycle,
+      });
     } catch (error) {
       console.error("OnlinePay Error:", error.response?.data || error.message);
       Alert.alert("Error", "Failed to initiate payment.");

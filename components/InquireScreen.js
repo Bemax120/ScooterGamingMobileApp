@@ -17,6 +17,8 @@ import { useFocusEffect } from "@react-navigation/native";
 
 export default function InquireScreen({ route, navigation }) {
   const { bookingId, totalPrice, motorcycle } = route.params;
+  const filters = route?.params?.filters || {};
+  console.log("Inquire: ", filters);
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState("");
@@ -107,7 +109,7 @@ export default function InquireScreen({ route, navigation }) {
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
-        navigation.navigate("HomeTabs", { screen: "Home" });
+        navigation.navigate("HomeTabs", { filters });
         return true;
       };
 
@@ -243,7 +245,7 @@ export default function InquireScreen({ route, navigation }) {
                     await updateDoc(bookingRef, {
                       bookingStatus: "Cancelled",
                     });
-                    navigation.navigate("HomeTabs", { screen: "Home" });
+                    navigation.navigate("HomeTabs", { filters });
                   } catch (error) {
                     console.error("Error updating booking status:", error);
                   }
@@ -268,7 +270,7 @@ export default function InquireScreen({ route, navigation }) {
           <TouchableOpacity
             style={styles.itemButton}
             onPress={() => {
-              navigation.navigate("HomeTabs", { screen: "Home" });
+              navigation.navigate("HomeTabs", { filters });
             }}
           >
             <Text style={styles.itemButtonText}>Return to Dashboard</Text>
