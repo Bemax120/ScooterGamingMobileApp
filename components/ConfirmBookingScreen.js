@@ -97,7 +97,6 @@ export default function ConfirmBooking({ route, navigation }) {
 
       setLoading(false);
       Alert.alert("Success", "Booking confirmed!");
-      console.log("Confirm:", filters);
       navigation.navigate("Inquire", {
         filters,
         bookingId,
@@ -153,7 +152,7 @@ export default function ConfirmBooking({ route, navigation }) {
     try {
       setLoading(true);
       const response = await axios.post(
-        "https://scootergaming.vercel.app/api/checkout",
+        "https://availiowebsite.vercel.app/api/checkout",
         {
           totalPrice,
           user: {
