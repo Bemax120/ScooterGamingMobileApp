@@ -18,7 +18,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../firebase/firebaseConfig";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
-import { ref, uploadString, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
 
 const defaultProfileImage = require("../assets/download.png");
 
@@ -31,7 +31,6 @@ const ProfilePage = ({ route }) => {
   const navigation = useNavigation();
   const auth = getAuth();
   const currentUid = auth.currentUser?.uid;
-
 
   useEffect(() => {
     if (!currentUid) {
@@ -59,7 +58,9 @@ const ProfilePage = ({ route }) => {
         const data = userDoc.data();
         setUser({
           ...data,
-          profileImage: data.profilePicture || Image.resolveAssetSource(defaultProfileImage).uri,
+          profileImage:
+            data.profileImage ||
+            Image.resolveAssetSource(defaultProfileImage).uri,
         });
         setPhoneNum(data.phoneNum || "");
       } else {
@@ -78,11 +79,9 @@ const ProfilePage = ({ route }) => {
     }
   };
 
-
   useEffect(() => {
     fetchUserData();
   }, []);
-
 
   const uploadImage = async () => {
     if (!currentUid) {
@@ -104,7 +103,6 @@ const ProfilePage = ({ route }) => {
     });
     if (result.canceled) return;
 
-
     const imageUri = result.assets[0].uri;
 
     try {
@@ -113,13 +111,9 @@ const ProfilePage = ({ route }) => {
         encoding: FileSystem.EncodingType.Base64,
       });
 
-      const imageRef = ref(
-        storage,
-        `profile_pictures/personal/${currentUid}`
-      );
+      const imageRef = ref(storage, `profile_pictures/personal/${currentUid}`);
 
-      const imageRef = ref(storage, filePath);
-      await uploadBytesResumable(imageRef, blob);
+      await uploadString(imageRef, base64Data, "base64");
 
       const downloadURL = await getDownloadURL(imageRef);
 
