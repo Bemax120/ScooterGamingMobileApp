@@ -15,6 +15,7 @@ import {
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // ensure this is from expo/vector-icons
+import BookingBannerMobile from '../components/BookingBannerMobile';
 
 // Firebase setup
 import { auth, storage, db } from "../firebase/firebaseConfig";
@@ -175,7 +176,7 @@ export default function ChatScreen({ navigation, route }) {
     );
   };
 
-  // Show a full‐screen loader if we’re in the middle of uploading an image
+  // Show a full‐screen loader if we're in the middle of uploading an image
   if (!conversationId && messages.length === 0 && loadingSendImage) {
     return (
       <View style={styles.loaderContainer}>
@@ -187,6 +188,8 @@ export default function ChatScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      {otherUserId && <BookingBannerMobile userId={otherUserId} />}
+
       {/* HEADER */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>

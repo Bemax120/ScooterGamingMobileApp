@@ -19,6 +19,7 @@ import {
   doc,
   getDoc,
 } from 'firebase/firestore';
+import BookingBannerMobile from '../components/BookingBannerMobile';
 
 export default function MessagesListScreen({ navigation }) {
   const [threads, setThreads]     = useState([]);
@@ -110,6 +111,7 @@ export default function MessagesListScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Messages</Text>
+      {uid && <BookingBannerMobile userId={uid} />}
       <FlatList
         data={threads}
         keyExtractor={item => item.id}
