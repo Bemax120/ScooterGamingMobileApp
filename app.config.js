@@ -24,7 +24,7 @@ export default {
       },
       config: {
         googleMaps: {
-          apiKey: process.env.GOOGLE_MAPS_API_KEY,
+          apiKey: "AIzaSyDuMcil6MODKv7AVdkY2AXM4X-uWsyIZO0",
         },
       },
       package: "com.bemax159.Availio",
