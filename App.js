@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -102,6 +102,16 @@ function HomeTabs({ route }) {
 }
 
 const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      const userData = await AsyncStorage.getItem("userData");
+      if (userData) setIsLoggedIn(true);
+    };
+    checkLogin();
+  }, []);
+
   const [fontsLoaded] = useFonts({
     "Inter-Regular": require("./fonts/Inter-Regular.ttf"),
     "Inter-Semibold": require("./fonts/Inter-Semibold.ttf"),
@@ -122,87 +132,41 @@ const App = () => {
     <MapProvider>
       <NavigationContainer onReady={onLayoutRootView}>
         <Stack.Navigator initialRouteName="Filter">
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen
-            name="MapPinScreen"
-            options={{ headerShown: false }}
-            component={MapPinScreen}
-          />
-          <Stack.Screen
-            name="MapBusinessScreen"
-            options={{ headerShown: false }}
-            component={MapBusinessScreen}
-          />
-          <Stack.Screen
-            name="DashboardFilter"
-            component={FilterScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Filter"
-            component={EnhancedFilterScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="HomeTabs"
-            component={HomeTabs}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="MotorcycleList"
-            component={MotorcycleListScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ConfirmBooking"
-            options={{ headerShown: false }}
-            component={ConfirmBookingScreen}
-          />
-          <Stack.Screen
-            name="VehicleDetail"
-            options={{ headerShown: false }}
-            component={VehicleDetailScreen}
-          />
-          <Stack.Screen
-            name="DateTimePicker"
-            options={{ headerShown: false }}
-            component={DateTimePickerScreen}
-          />
-          <Stack.Screen
-            name="Rating"
-            options={{ headerShown: false }}
-            component={RatingScreen}
-          />
-          <Stack.Screen
-            name="Payment"
-            options={{ headerShown: false }}
-            component={PaymentScreen}
-          />
-          <Stack.Screen
-            name="PaymentDetails"
-            options={{ headerShown: false }}
-            component={PaymentDetailsScreen}
-          />
-          <Stack.Screen
-            name="PaymentSuccess"
-            options={{ headerShown: false }}
-            component={PaymentSuccessScreen}
-          />
-          <Stack.Screen
-            name="Inquire"
-            component={InquireScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Chat"
-            component={ChatScreen}
-            options={{ headerShown: false }}
-          />
+
+          {/* ✅ Public Screens - Always Available */}
+          <Stack.Screen name="HomeTabs" component={HomeTabs} options={{ headerShown: false }} />
+          <Stack.Screen name="MapPinScreen" component={MapPinScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="MapBusinessScreen" component={MapBusinessScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="DateTimePicker" component={DateTimePickerScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Filter" component={EnhancedFilterScreen} options={{ headerShown: false }} />
+
+          {/* 🔐 Auth Screens - Only when not logged in */}
+          {!isLoggedIn && (
+            <>
+              <Stack.Screen name="Login">
+                {(props) => (
+                  <LoginScreen {...props} setIsLoggedIn={setIsLoggedIn} />
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Register" component={RegisterScreen} />
+            </>
+          )}
+
+          {/* 🔒 Protected Screens - Only when logged in */}
+          {isLoggedIn && (
+            <>
+              <Stack.Screen name="DashboardFilter" component={FilterScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="MotorcycleList" component={MotorcycleListScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="ConfirmBooking" component={ConfirmBookingScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="VehicleDetail" component={VehicleDetailScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="Rating" component={RatingScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="Payment" component={PaymentScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="PaymentDetails" component={PaymentDetailsScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="PaymentSuccess" component={PaymentSuccessScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="Inquire" component={InquireScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="Chat" component={ChatScreen} options={{ headerShown: false }} />
+            </>
+          )}
         </Stack.Navigator>
         <Toast />
       </NavigationContainer>

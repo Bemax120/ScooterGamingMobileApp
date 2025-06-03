@@ -23,14 +23,12 @@ import {
 } from "firebase/firestore";
 import { SocialIcon } from "react-native-elements";
 import { auth, db } from "../firebase/firebaseConfig";
-import { useNavigation, useRoute, useFocusEffect  } from "@react-navigation/native";
+import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native";
 
 const defaultProfileImage = require("../assets/download.png");
 const Availio = require("../assets/Availio.png");
 
-const LoginScreen = () => {
-  const navigation = useNavigation();
-  const route = useRoute();
+const LoginScreen = ({ navigation, route, setIsLoggedIn }) => {
 
   const filters = route?.params?.filters || {};
 
@@ -96,6 +94,10 @@ const LoginScreen = () => {
         password
       );
       const user = userCredential.user;
+
+      if (!user) {
+        throw new Error("User not found after login.");
+      }
 
       const userDoc = await getDoc(doc(db, "users", user.uid));
 

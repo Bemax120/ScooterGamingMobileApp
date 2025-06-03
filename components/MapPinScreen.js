@@ -304,6 +304,7 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: 16,
   },
+  
   searchContainer: {
     position: "absolute",
     top: 50,

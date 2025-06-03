@@ -53,21 +53,28 @@ const RegisterScreen = ({ navigation }) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
       const user = userCredential.user;
+
+      // Send email verification link
       await sendEmailVerification(user);
 
+      // Save user info in Firestore with emailVerified as false
       await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        username: form.username,
         email: form.email,
-        emailVerified: true,
+        emailVerified: false, // <- set to false initially
         firstName: form.firstName,
         lastName: form.lastName,
-        numRides: 0,
         phoneNum: form.phoneNum,
-        uid: user.uid,
+        numRides: 0,
         profilePicture: "",
-        username: form.username,
       });
 
-      Alert.alert("Success", "Registration successful!");
+      Alert.alert(
+        "Verify Email",
+        "A verification link has been sent to your email. Please verify your email before logging in."
+      );
+
       navigation.navigate('Login');
     } catch (error) {
       console.error("Registration Error:", error);
@@ -76,6 +83,7 @@ const RegisterScreen = ({ navigation }) => {
       setLoading(false);
     }
   };
+
 
   return (
     <View style={styles.container}>
