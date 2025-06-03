@@ -15,13 +15,13 @@ import {
 
 // ✅ Firebase config
 const firebaseConfig = {
-  apiKey: FIREBASE_API_KEY,
-  authDomain: FIREBASE_AUTH_DOMAIN,
-  projectId: FIREBASE_PROJECT_ID,
-  storageBucket: FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
-  appId: FIREBASE_APP_ID,
-  measurementId: FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyAtjOz9FnetGrOz0gA4eexBe03OBCqdBYo",
+  authDomain: "scootergamingapp-94bb4.firebaseapp.com",
+  projectId: "scootergamingapp-94bb4",
+  storageBucket: "scootergamingapp-94bb4.appspot.com",
+  messagingSenderId: "453726606474",
+  appId: "1:453726606474:web:d03639ef5990086de30973",
+  measurementId: "G-NTRDR5R4EZ",
 };
 
 let app;
@@ -39,5 +39,4 @@ const auth = initializeAuth(app, {
 const db = getFirestore(app);
 const storage = getStorage(app);
 
- export { app, auth, db, storage };
- 
+export { app, auth, db, storage };
