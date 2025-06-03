@@ -54,6 +54,7 @@ const VehicleDetailScreen = ({ route, navigation }) => {
           onPress={() => {
             auth.currentUser
               ? navigation.navigate("ConfirmBooking", {
+                  filters,
                   motorcycle,
                   startDate,
                   endDate,

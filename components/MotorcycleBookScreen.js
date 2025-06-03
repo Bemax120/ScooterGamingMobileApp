@@ -253,6 +253,7 @@ const MotorcycleBookScreen = ({ route }) => {
                   style={styles.secondaryButton}
                   onPress={() => {
                     navigation.navigate("Inquire", {
+                      filters,
                       bookingId: item.id,
                       totalPrice: item.total,
                       motorcycle: item,
@@ -267,6 +268,7 @@ const MotorcycleBookScreen = ({ route }) => {
                     style={styles.primaryButton}
                     onPress={() => {
                       navigation.navigate("Rating", {
+                        filters,
                         bookingId: item.id,
                       });
                     }}
@@ -278,6 +280,8 @@ const MotorcycleBookScreen = ({ route }) => {
                     style={styles.primaryButton}
                     onPress={() => {
                       navigation.navigate("Inquire", {
+                        filters,
+
                         bookingId: item.id,
                         totalPrice: item.total,
                         motorcycle: item,

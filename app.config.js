@@ -2,8 +2,8 @@ import "dotenv/config";
 
 export default {
   expo: {
-    name: "Availio",
-    slug: "Availio",
+    name: "ScooterGamingApp",
+    slug: "ScooterGamingApp",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
