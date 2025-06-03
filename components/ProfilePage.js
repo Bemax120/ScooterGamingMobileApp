@@ -30,9 +30,10 @@ const ProfilePage = ({ route }) => {
   const [phoneNum, setPhoneNum] = useState("");
   const navigation = useNavigation();
   const auth = getAuth();
+  const currentUid = auth.currentUser?.uid;
 
   useEffect(() => {
-    if (!auth.currentUser) {
+    if (!currentUid) {
       navigation.reset({
         index: 0,
         routes: [
@@ -45,11 +46,14 @@ const ProfilePage = ({ route }) => {
         ],
       });
     }
-  }, [auth.currentUser]);
+  }, [currentUid]);
 
   const fetchUserData = async () => {
+    if (!currentUid) return;
+
     try {
-      const userDoc = await getDoc(doc(db, "users", auth.currentUser.uid));
+      setLoading(true);
+      const userDoc = await getDoc(doc(db, "users", currentUid));
       if (userDoc.exists()) {
         const data = userDoc.data();
         setUser({
@@ -59,9 +63,17 @@ const ProfilePage = ({ route }) => {
             Image.resolveAssetSource(defaultProfileImage).uri,
         });
         setPhoneNum(data.phoneNum || "");
+      } else {
+        setUser({
+          firstName: "",
+          lastName: "",
+          email: auth.currentUser.email,
+          profileImage: Image.resolveAssetSource(defaultProfileImage).uri,
+        });
       }
     } catch (error) {
       console.error("Error retrieving user data:", error);
+      Alert.alert("Error", "Could not load profile. Try again.");
     } finally {
       setLoading(false);
     }
@@ -71,56 +83,54 @@ const ProfilePage = ({ route }) => {
     fetchUserData();
   }, []);
 
-  const uploadImage = async (folder) => {
+  const uploadImage = async () => {
+    if (!currentUid) {
+      Alert.alert("Error", "You must be logged in to upload a photo.");
+      return;
+    }
+
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permission.granted) {
+      Alert.alert("Permission Denied", "Grant access to upload images.");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 0.8,
+      aspect: [1, 1],
+    });
+    if (result.canceled) return;
+
+    const imageUri = result.assets[0].uri;
+
     try {
-      const permission =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (!permission.granted) {
-        Alert.alert("Permission Denied", "Grant access to upload images.");
-        return;
-      }
-
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-      });
-
-      if (result.canceled) return;
-
-      const imageUri = result.assets[0].uri;
-      const userId = auth.currentUser?.uid;
-      if (!userId) {
-        Alert.alert("Error", "You must be logged in.");
-        return;
-      }
-
+      setLoading(true);
       const base64Data = await FileSystem.readAsStringAsync(imageUri, {
         encoding: FileSystem.EncodingType.Base64,
       });
 
       const imageRef = ref(
         storage,
-        folder === "profile_pictures"
-          ? `profile_pictures/personal/${userId}`
-          : `verification_docs/${userId}`
+        `profile_pictures/personal/${currentUid}`
       );
 
       await uploadString(imageRef, base64Data, "base64");
 
       const downloadURL = await getDownloadURL(imageRef);
 
-      const fieldName =
-        folder === "profile_pictures" ? "profilePicture" : "verificationDoc";
-
-      await updateDoc(doc(db, "users", userId), {
-        [fieldName]: downloadURL,
+      await updateDoc(doc(db, "users", currentUid), {
+        profileImage: downloadURL,
       });
 
-      fetchUserData();
-      Alert.alert("Success", "Upload complete.");
+      await fetchUserData();
+      Alert.alert("Success", "Profile picture updated.");
     } catch (error) {
       console.error("❌ Upload error:", error);
       Alert.alert("Error", "Upload failed. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -159,7 +169,7 @@ const ProfilePage = ({ route }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.profileHeader}>
-        <TouchableOpacity onPress={() => uploadImage("profile_pictures")}>
+        <TouchableOpacity onPress={uploadImage}>
           <Image
             source={{ uri: user.profileImage }}
             style={styles.profileImage}
