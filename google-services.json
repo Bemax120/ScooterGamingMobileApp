@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "453726606474",
+    "project_id": "scootergamingapp-94bb4",
+    "storage_bucket": "scootergamingapp-94bb4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453726606474:android:bfeca8bba861be68e30973",
+        "android_client_info": {
+          "package_name": "com.bemax159.Availio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453726606474-p3g7sochqm32pmsqeqndecbovpgb3bm4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuzByxlucfUCydSpk795h7oepwAYK7w8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "453726606474-p3g7sochqm32pmsqeqndecbovpgb3bm4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

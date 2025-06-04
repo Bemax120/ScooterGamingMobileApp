@@ -13,22 +13,26 @@ import {
   FIREBASE_MEASUREMENT_ID,
 } from "@env";
 
-// ✅ Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyAtjOz9FnetGrOz0gA4eexBe03OBCqdBYo",
-  authDomain: "scootergamingapp-94bb4.firebaseapp.com",
-  projectId: "scootergamingapp-94bb4",
-  storageBucket: "scootergamingapp-94bb4.appspot.com",
-  messagingSenderId: "453726606474",
-  appId: "1:453726606474:web:d03639ef5990086de30973",
-  measurementId: "G-NTRDR5R4EZ",
+  apiKey: FIREBASE_API_KEY,
+  authDomain: FIREBASE_AUTH_DOMAIN,
+  projectId: FIREBASE_PROJECT_ID,
+  storageBucket: FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+  appId: FIREBASE_APP_ID,
+  measurementId: FIREBASE_MEASUREMENT_ID,
 };
+
+console.log("🌐 Firebase Config:", firebaseConfig);
 
 let app;
 if (!global.firebaseApp) {
+  console.log("🚀 Initializing Firebase App...");
   app = initializeApp(firebaseConfig);
   global.firebaseApp = app;
+  console.log("✅ Firebase Initialized");
 } else {
+  console.log("⚠️ Firebase already initialized");
   app = global.firebaseApp;
 }
 
@@ -36,7 +40,12 @@ if (!global.firebaseApp) {
 const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
+console.log("🔐 Firebase Auth Initialized");
+
 const db = getFirestore(app);
+console.log("📦 Firestore Initialized");
+
 const storage = getStorage(app);
+console.log("📁 Storage Initialized");
 
 export { app, auth, db, storage };
