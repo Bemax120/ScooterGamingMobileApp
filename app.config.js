@@ -28,6 +28,7 @@ export default {
         },
       },
       package: "com.bemax159.Availio",
+      googleServicesFile: "./google-services.json",
     },
     web: {
       favicon: "./assets/favicon.png",
